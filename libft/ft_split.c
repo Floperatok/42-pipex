@@ -6,9 +6,18 @@
 /*   By: nsalles <nsalles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 22:44:46 by nsalles           #+#    #+#             */
-/*   Updated: 2023/11/18 13:18:31 by nsalles          ###   ########.fr       */
+/*   Updated: 2023/11/18 13:35:17 by nsalles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/* Ft_split modifications for Pipex:
+*	Ft_split no longer cut the string s when the separator c is found
+*	within simple quotes
+*	This is needed for some special case of Pipex like:
+*		./pipex infile cat "tr ' ' '.'" outfile
+*	In this example we want ft_split to keep the space inside 
+*	the simple quotes.
+*/
 
 #include <stdio.h>
 #include "libft.h"
