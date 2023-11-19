@@ -6,7 +6,7 @@
 /*   By: nsalles <nsalles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 11:30:33 by nsalles           #+#    #+#             */
-/*   Updated: 2023/11/18 13:13:39 by nsalles          ###   ########.fr       */
+/*   Updated: 2023/11/19 01:39:11 by nsalles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,69 +35,56 @@ void	execution(char **cmd, char **env)
 	}
 	free_tab(cmd);
 	free(path);
-	exit(EXIT_SUCCESS);
 }
 
-void	child(int *p_fd, char **av, char **env)
+void	redirect_process(int pid, int *pipe_fd, char *av, char **env)
 {
-	char	**cmd;
-	int		fd;
-
-	close(p_fd[0]);
-	fd = open(av[1], O_RDONLY, 0777);
-	if (fd == -1)
+	if (pid == 0)
 	{
-		ft_putstr_fd("pipex: no such file of directory: ", 2);
-		ft_putendl_fd(av[1], 2);
-		exit(EXIT_FAILURE);
+		dup2(pipe_fd[1], STDOUT_FILENO);
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+		execution(ft_split(av, ' '), env);
 	}
-	dup2(fd, STDIN_FILENO);
-	close(fd);
-	dup2(p_fd[1], STDOUT_FILENO);
-	close(p_fd[1]);
-	cmd = ft_split(av[2], ' ');
-	execution(cmd, env);
+	else
+	{
+		dup2(pipe_fd[0], STDIN_FILENO);
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+	}
 }
 
-void	parent(int *p_fd, char **av, char **env)
+void	make_pipe(char *av, char **env)
 {
-	char	**cmd;
-	int		fd;
+	int		pid;
+	int		pipe_fd[2];
 
-	close(p_fd[1]);
-	fd = open(av[4], O_WRONLY | O_TRUNC | O_CREAT, 0777);
-	if (fd == -1)
+	if (pipe(pipe_fd) == -1)
+		return (perror("pipex"));
+	pid = fork();
+	if (pid == -1)
 	{
-		ft_putstr_fd("pipex: no such file of directory: ", 2);
-		ft_putendl_fd(av[4], 2);
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+		perror("pipex");
 		exit(EXIT_FAILURE);
 	}
-	dup2(fd, STDOUT_FILENO);
-	close(fd);
-	dup2(p_fd[0], STDIN_FILENO);
-	close(p_fd[0]);
-	cmd = ft_split(av[3], ' ');
-	execution(cmd, env);
+	redirect_process(pid, pipe_fd, av, env);
 }
 
 int	main(int ac, char **av, char **env)
 {
-	int	pid;
-	int	fd[2];
+	int	i;
+	int	fd_out;
 
-	if (ac != 5)
-		return (ft_putstr_fd("Pipex must have exactly 4 arguments\n", 2), 1);
-	if (pipe(fd) == -1)
-		return (perror("Error "), 1);
-	pid = fork();
-	if (pid == -1)
-	{
-		close(fd[0]);
-		close(fd[1]);
-		return (perror("Error "), 1);
-	}
-	if (pid == 0)
-		child(fd, av, env);
-	else
-		parent(fd, av, env);
+	if (ac < 5)
+		return (ft_putstr_fd("Pipex must have at least 5 arguments\n", 2), 1);
+	fd_out = open_manager(av[1], av[ac - 1]);
+	i = -1;
+	while (++i < ac - 4)
+		make_pipe(av[i + 2], env);
+	dup2(fd_out, STDOUT_FILENO);
+	close(fd_out);
+	execution(ft_split(av[ac - 2], ' '), env);
+	return (0);
 }
