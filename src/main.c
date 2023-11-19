@@ -6,7 +6,7 @@
 /*   By: nsalles <nsalles@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 11:30:33 by nsalles           #+#    #+#             */
-/*   Updated: 2023/11/19 01:39:11 by nsalles          ###   ########.fr       */
+/*   Updated: 2023/11/19 01:46:27 by nsalles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ void	execution(char **cmd, char **env)
 	}
 	if (execve(path, cmd, env) == -1)
 	{
-		ft_putstr_fd("pipex: no such file or directory: ", 2);
-		ft_putendl_fd(path, 2);
+		perror("pipex");
 		free(path);
 		free_tab(cmd);
 		exit(EXIT_FAILURE);
