@@ -2,8 +2,8 @@
 ## 📑 Introduction
 School 42's `pipex` project challenges students to rebuild a shell like pipe in the C language.\
 To do so, students need to have a thorough understanding of input/output redirections, processes creation and manipulation, as well as memory leaks management and using the environment to extract variables such as `$PATH`  for command execution.
-As a bonus, we can obtionally handle multiple pipes and code a [**here document**](https://tldp.org/LDP/abs/html/here-docs.html) implementation, reading standard input while waiting for the user to write the contents of a dummy file.\
-Personally, I love this project because of all the new concepts it introduces. And it's a excellent introduction to the future [**42-minishell**](https://github.com/Floperatok/42-minishell) project, where we'll have to create a bash clone.
+As a bonus, we can obtionally handle multiple pipes and code a [here document](https://tldp.org/LDP/abs/html/here-docs.html) implementation, reading standard input while waiting for the user to write the contents of a dummy file.\
+Personally, I love this project because of all the new concepts it introduces. And it's a excellent introduction to the future [42-minishell](https://github.com/Floperatok/42-minishell) project, where we'll have to create a bash clone.
 
 Subject : <a href=asset/en.subject.pdf>en.pipex_subject.pdf<a/>
 ### My grade
@@ -28,7 +28,7 @@ A typical exemple of pipex use :
 ```sh
 echo "hello world" > input_file && ./pipex input_file "cat -e" "rev" output_file
 ```
-You can use the [**here document**](https://tldp.org/LDP/abs/html/here-docs.html) feature using the following command :
+You can use the [here document](https://tldp.org/LDP/abs/html/here-docs.html) feature using the following command :
 ```sh
 ./pipex here_doc EOF "command1" "command2" output_file
 ```
