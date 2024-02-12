@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsalles <nsalles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsalles <nsalles@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 11:30:33 by nsalles           #+#    #+#             */
-/*   Updated: 2023/11/19 14:25:50 by nsalles          ###   ########.fr       */
+/*   Updated: 2024/02/12 16:47:16 by nsalles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+/*
+ *	Search for the $PATH environment variable, return it's value if found,
+ *	else NULL.
+*/
 char	*ft_getpath(char *command, char **env)
 {
 	char	**paths;
@@ -35,6 +39,9 @@ char	*ft_getpath(char *command, char **env)
 	return (ft_free_tab(paths), ft_strdup(command));
 }
 
+/*
+ *	Executes the command cmd by searching in the environment variable $PATH.
+*/
 void	execution(char **cmd, char **env)
 {
 	char	*path;
@@ -59,7 +66,7 @@ void	execution(char **cmd, char **env)
 	free(path);
 }
 
-void	redirect_process(int pid, int *pipe_fd, char *av, char **env)
+static void	redirect_process(int pid, int *pipe_fd, char *av, char **env)
 {
 	if (pid == 0)
 	{
@@ -76,6 +83,10 @@ void	redirect_process(int pid, int *pipe_fd, char *av, char **env)
 	}
 }
 
+/*
+ *	Creates a pipe and fork the program, sends the child process to executes
+ *	the command in av.
+*/
 void	make_pipe(char *av, char **env)
 {
 	int		pid;

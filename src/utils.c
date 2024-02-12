@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nsalles <nsalles@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nsalles <nsalles@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 11:30:47 by nsalles           #+#    #+#             */
-/*   Updated: 2023/11/19 14:25:39 by nsalles          ###   ########.fr       */
+/*   Updated: 2024/02/12 16:56:27 by nsalles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+/*
+ *	Pipex error message management.
+*/
 void	check_ac(int ac, int is_here_doc)
 {
 	if (is_here_doc)
@@ -33,6 +36,9 @@ void	check_ac(int ac, int is_here_doc)
 	}
 }
 
+/*
+ *	Open the file with the flags 'o_flags' and returns the file descriptor.
+*/
 int	open_file(char *file, int o_flag)
 {
 	int	fd;
@@ -57,7 +63,9 @@ int	open_file(char *file, int o_flag)
 	return (fd);
 }
 
-// Returns the value of the environement [env] variable [var]
+/*
+ *	Returns the value of the given environment variable.
+*/
 char	*ft_getenv(char **env, char *var)
 {
 	int		i;
@@ -75,6 +83,10 @@ char	*ft_getenv(char **env, char *var)
 	return (NULL);
 }
 
+/*
+ *	Read in the standars input until the limiter is found. Write the readed text
+ *	in the given pipe.
+*/
 void	here_doc_reading(char *limiter, int *pipe_fd)
 {
 	char	*line;
@@ -97,6 +109,9 @@ void	here_doc_reading(char *limiter, int *pipe_fd)
 	}
 }
 
+/*
+ *	Create a pipe and open a here document to write in it.
+*/
 void	ft_here_doc(char *limiter)
 {
 	int	pid;
